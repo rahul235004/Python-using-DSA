@@ -1,0 +1,127 @@
+class sign_in_sign_up:
+    print("hey! welcome...")
+
+    def sign_up(self):
+        self.data = []
+        username = input("enter your email: ")
+        password = input("enter your phone_num: ")
+        phone_num = input("enter username: ")
+        email = input("enter password: ")
+        print("sign up successful!")
+        self.data.append(username)
+        self.data.append(password)
+        self.data.append(phone_num)
+        self.data.append(email)
+
+    def sign_in(self):
+        login_username = input("enter username: ")
+        login_password = input("enter login password: ")
+        if login_username in self.data and login_password in self.data:
+            print("sign in successful")
+        else:
+            print("invalid")
+
+obj = sign_in_sign_up()
+
+while True:
+    print("1.sign up, 2.sign in ")
+    choice=int(input("enter your choice:"))
+    if choice == 1:
+        print("welcome to sign up")
+        obj.sign_up()
+    elif choice == 2:
+        print("welcome to sign in")
+        obj.sign_in()
+        break
+def t_movie(a):
+    global f
+    f += 1
+    print("Which movie do you want to watch?")
+    print("1. EVIL DEAD")
+    print("2. THE NONE")
+    print("3. CONJURING 2")
+    print("4. Back")
+    movie = int(input("Choose your movie: "))
+    if movie == 4:
+        center()
+    elif movie > 4:
+        t_movie(a)
+    theater()
+def theater():
+    print("Which screen do you want to watch the movie?")
+    print("1. 4K ")
+    print("2. 3D")
+    print("3. 8k")
+    a = int(input("Choose your screen: "))
+
+    if a in [ 1,2,3]:
+        timing(a)
+    
+    elif a > 3 :
+        print("Invalid time selection. Please try again.")
+        theater()
+def timing(a):
+    time_slots = {
+        1: "10.00-1.00",
+        2: "1.10-4.10",
+        3: "4.20-7.20",
+        4: "7.30-10.30"
+    }
+    print("Choose your time:")
+    print(time_slots)
+    t = int(input("Select your time: "))
+    if t in time_slots:
+        print(f"Successful! Enjoy the movie at {time_slots[t]}")
+    else:
+        print("Invalid time selection. Please try again.")
+        timing(a)
+
+def center():
+    print("Which theater do you wish to see the movie?")
+    print("1. Imax")
+    print("2. Cinemax")
+    print("3. PVR")
+    print("4. Back")
+    a = int(input("Choose your option: "))
+    if a in [1, 2, 3]:
+        t_movie(a)
+    else:
+        print("Invalid choice. Please select a valid city.")
+
+def City():
+    print("Welcome to movie ticket booking!")
+    print("Where do you want to watch the movie?")
+    print("1. BELLARY ")
+    print("2. HOSPETE ")
+    print("3. SIRUGUPPA ")
+    place = int(input("Choose your option: "))
+    if place in [1, 2, 3]:
+        center()
+    else:
+        print("Invalid choice. Please select a valid city.")
+    
+f = 0
+City()
+
+numbers_dict = {
+    "row1": [1, 2, 3, 4, 5],
+    "row2": [6, 7, 8, 9, 10],
+    "row3": [11, 12, 13, 14, 15],
+    "row4": [16, 17, 18, 19, 20],
+    "row5": [21, 22, 23, 24, 25]
+}
+
+def delete_numbers(seats):
+    for number in seats:
+        for row, nums in numbers_dict.items():
+            if number in nums:
+                nums.remove(number)
+                print(f"Seat {number} allotted from row {row}")
+                break
+    print("available seats order:")
+    print(numbers_dict)
+ticket = int(input("Number of tickets you want: "))
+print(numbers_dict)
+numbers_to_delete = input("Enter the seat numbers to allot (separated by spaces): ").split()
+numbers_to_delete = [int(number) for number in numbers_to_delete]
+delete_numbers(numbers_to_delete)
