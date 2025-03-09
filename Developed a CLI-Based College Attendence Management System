@@ -1,0 +1,333 @@
+class Person:
+    """Base class for students and faculty."""
+    def __init__(self, id, name):
+        self.id = id
+        self.name = name
+        self.attendance = []
+
+    def mark_attendance(self, status):
+        """Mark attendance for the person."""
+        self.attendance.append(status)
+
+    def calculate_attendance_percentage(self, total_days):
+        """Calculate attendance percentage."""
+        if total_days == 0:
+            return 0
+        present_days = self.attendance.count("Present")
+        return (present_days / total_days) * 100
+
+    def __str__(self):
+        """String representation of the person."""
+        return f"{self.name} (ID: {self.id})"
+
+
+class Student(Person):
+    """Class for students."""
+    def __init__(self, roll_number, name):
+        super().__init__(roll_number, name)
+        self.condonation_fee = 0
+
+    def impose_condonation_fee(self, fee):
+        """Impose condonation fee for low attendance."""
+        self.condonation_fee = fee
+
+    def pay_condonation_fee(self, amount):
+        """Pay condonation fee."""
+        if amount >= self.condonation_fee:
+            self.condonation_fee = 0
+            print("Condonation fee cleared.")
+        else:
+            self.condonation_fee -= amount
+            print(f"Remaining fee: ₹{self.condonation_fee}")
+
+    def __str__(self):
+        """String representation of the student."""
+        return f"Student: {super().__str__()}"
+
+
+class Faculty(Person):
+    """Class for faculty."""
+    def __init__(self, faculty_id, name, faculty_type):
+        super().__init__(faculty_id, name)
+        self.faculty_type = faculty_type
+        self.bonus = 0
+
+    def award_bonus(self, bonus_amount):
+        """Award bonus for high attendance."""
+        self.bonus = bonus_amount
+
+    def __str__(self):
+        """String representation of the faculty."""
+        return f"{self.faculty_type.capitalize()} Faculty: {super().__str__()}"
+
+
+class AttendanceSystem:
+    """Class to manage the attendance system."""
+    def __init__(self):
+        self.students = {}
+        self.faculty = {}
+        self.working_days = 0
+
+    def add_student(self, roll_number, name):
+        """Add a new student."""
+        if roll_number in self.students:
+            print("Student with this roll number already exists.")
+            return
+        self.students[roll_number] = Student(roll_number, name)
+        print(f"Student {name} added successfully.")
+
+    def add_faculty(self, faculty_id, name, faculty_type):
+        """Add a new faculty member."""
+        if faculty_id in self.faculty:
+            print("Faculty with this ID already exists.")
+            return
+        self.faculty[faculty_id] = Faculty(faculty_id, name, faculty_type)
+        print(f"Faculty {name} added successfully.")
+
+    def mark_attendance(self):
+        """Mark attendance for students, teaching faculty, or non-teaching faculty."""
+        self.working_days += 1
+        print(f"Marking attendance for working day {self.working_days}:")
+
+        # Ask the user which group to mark attendance for first
+        print("\nWhich group do you want to mark attendance for first?")
+        print("1. Students")
+        print("2. Teaching Faculty")
+        print("3. Non-Teaching Faculty")
+        choice = input("Enter your choice (1/2/3): ").strip()
+
+        if choice == '1':
+            # Mark attendance for students
+            print("\nMarking attendance for students:")
+            for student in self.students.values():
+                status = input(f"Is {student} present? (y/n): ").strip().lower()
+                student.mark_attendance("Present" if status == 'y' else "Absent")
+
+            # Ask if the user wants to mark attendance for teaching faculty
+            choice = input("\nDo you want to mark attendance for teaching faculty? (y/n): ").strip().lower()
+            if choice == 'y':
+                print("\nMarking attendance for teaching faculty:")
+                for faculty_member in self.faculty.values():
+                    if faculty_member.faculty_type == "teaching":
+                        status = input(f"Is {faculty_member} present? (y/n): ").strip().lower()
+                        faculty_member.mark_attendance("Present" if status == 'y' else "Absent")
+
+            # Ask if the user wants to mark attendance for non-teaching faculty
+            choice = input("\nDo you want to mark attendance for non-teaching faculty? (y/n): ").strip().lower()
+            if choice == 'y':
+                print("\nMarking attendance for non-teaching faculty:")
+                for faculty_member in self.faculty.values():
+                    if faculty_member.faculty_type == "non-teaching":
+                        status = input(f"Is {faculty_member} present? (y/n): ").strip().lower()
+                        faculty_member.mark_attendance("Present" if status == 'y' else "Absent")
+
+        elif choice == '2':
+            # Mark attendance for teaching faculty
+            print("\nMarking attendance for teaching faculty:")
+            for faculty_member in self.faculty.values():
+                if faculty_member.faculty_type == "teaching":
+                    status = input(f"Is {faculty_member} present? (y/n): ").strip().lower()
+                    faculty_member.mark_attendance("Present" if status == 'y' else "Absent")
+
+            # Ask if the user wants to mark attendance for students
+            choice = input("\nDo you want to mark attendance for students? (y/n): ").strip().lower()
+            if choice == 'y':
+                print("\nMarking attendance for students:")
+                for student in self.students.values():
+                    status = input(f"Is {student} present? (y/n): ").strip().lower()
+                    student.mark_attendance("Present" if status == 'y' else "Absent")
+
+            # Ask if the user wants to mark attendance for non-teaching faculty
+            choice = input("\nDo you want to mark attendance for non-teaching faculty? (y/n): ").strip().lower()
+            if choice == 'y':
+                print("\nMarking attendance for non-teaching faculty:")
+                for faculty_member in self.faculty.values():
+                    if faculty_member.faculty_type == "non-teaching":
+                        status = input(f"Is {faculty_member} present? (y/n): ").strip().lower()
+                        faculty_member.mark_attendance("Present" if status == 'y' else "Absent")
+
+        elif choice == '3':
+            # Mark attendance for non-teaching faculty
+            print("\nMarking attendance for non-teaching faculty:")
+            for faculty_member in self.faculty.values():
+                if faculty_member.faculty_type == "non-teaching":
+                    status = input(f"Is {faculty_member} present? (y/n): ").strip().lower()
+                    faculty_member.mark_attendance("Present" if status == 'y' else "Absent")
+
+            # Ask if the user wants to mark attendance for students
+            choice = input("\nDo you want to mark attendance for students? (y/n): ").strip().lower()
+            if choice == 'y':
+                print("\nMarking attendance for students:")
+                for student in self.students.values():
+                    status = input(f"Is {student} present? (y/n): ").strip().lower()
+                    student.mark_attendance("Present" if status == 'y' else "Absent")
+
+            # Ask if the user wants to mark attendance for teaching faculty
+            choice = input("\nDo you want to mark attendance for teaching faculty? (y/n): ").strip().lower()
+            if choice == 'y':
+                print("\nMarking attendance for teaching faculty:")
+                for faculty_member in self.faculty.values():
+                    if faculty_member.faculty_type == "teaching":
+                        status = input(f"Is {faculty_member} present? (y/n): ").strip().lower()
+                        faculty_member.mark_attendance("Present" if status == 'y' else "Absent")
+
+        else:
+            print("Invalid choice. Attendance not marked.")
+
+        print(f"Attendance marked for working day {self.working_days}.")
+
+    def calculate_attendance_percentage(self):
+        """Calculate attendance percentage for all students and faculty."""
+        if self.working_days == 0:
+            print("No attendance records found.")
+            return
+
+        print("\nCalculating attendance percentage:")
+        # For students
+        for student in self.students.values():
+            percentage = student.calculate_attendance_percentage(self.working_days)
+            print(f"{student}: {percentage:.2f}%")
+            if percentage < 75:
+                fee = int((75 - percentage) * 100)
+                student.impose_condonation_fee(fee)
+                print(f"  -> Condonation fee imposed: ₹{fee}")
+
+        # For faculty
+        for faculty_member in self.faculty.values():
+            percentage = faculty_member.calculate_attendance_percentage(self.working_days)
+            print(f"{faculty_member}: {percentage:.2f}%")
+            if percentage > 95:
+                bonus = 5000 if faculty_member.faculty_type == "teaching" else 3000
+                faculty_member.award_bonus(bonus)
+                print(f"  -> Bonus awarded: ₹{bonus}")
+
+    def reset_attendance_records(self):
+        """Reset attendance records for a new term."""
+        confirmation = input("Are you sure you want to reset all attendance records? (y/n): ").strip().lower()
+        if confirmation == 'y':
+            for student in self.students.values():
+                student.attendance.clear()
+            for faculty_member in self.faculty.values():
+                faculty_member.attendance.clear()
+            self.working_days = 0
+            print("Attendance records reset successfully.")
+        else:
+            print("Reset operation canceled.")
+
+    def view_student_details(self, roll_number):
+        """View details of a specific student."""
+        if roll_number not in self.students:
+            print("Student not found.")
+            return
+        student = self.students[roll_number]
+        print(f"\nStudent Details:")
+        print(student)
+        print("Attendance Records:")
+        for day, status in enumerate(student.attendance, start=1):
+            print(f"  Day {day}: {status}")
+        print(f"Attendance Percentage: {student.calculate_attendance_percentage(self.working_days):.2f}%")
+        print(f"Condonation Fee: ₹{student.condonation_fee}")
+
+    def view_faculty_details(self, faculty_id):
+        """View details of a specific faculty member."""
+        if faculty_id not in self.faculty:
+            print("Faculty not found.")
+            return
+        faculty_member = self.faculty[faculty_id]
+        print(f"\nFaculty Details:")
+        print(faculty_member)
+        print("Attendance Records:")
+        for day, status in enumerate(faculty_member.attendance, start=1):
+            print(f"  Day {day}: {status}")
+        print(f"Attendance Percentage: {faculty_member.calculate_attendance_percentage(self.working_days):.2f}%")
+        print(f"Bonus Awarded: ₹{faculty_member.bonus}")
+
+    def view_attendance_summary(self):
+        """Display the attendance summary for students, teaching faculty, and non-teaching faculty."""
+        if self.working_days == 0:
+            print("No attendance records found.")
+            return
+
+        print("\nAttendance Summary:")
+        print(f"Total Working Days: {self.working_days}")
+
+        # For students
+        print("\nStudents:")
+        print(f"{'Name':<20} {'ID':<10} {'Present Days':<15} {'Absent Days':<15} {'Attendance Percentage':<20} {'Condonation Fee':<20}")
+        for student in self.students.values():
+            present_days = student.attendance.count("Present")
+            absent_days = student.attendance.count("Absent")
+            attendance_percentage = student.calculate_attendance_percentage(self.working_days)
+            condonation_fee = student.condonation_fee
+            print(f"{student.name:<20} {student.id:<10} {present_days:<15} {absent_days:<15} {attendance_percentage:<20.2f} {condonation_fee if condonation_fee > 0 else 'None':<20}")
+
+        # For teaching faculty
+        print("\nTeaching Faculty:")
+        print(f"{'Name':<20} {'ID':<10} {'Present Days':<15} {'Absent Days':<15} {'Attendance Percentage':<20} {'Bonus':<20}")
+        for faculty_member in self.faculty.values():
+            if faculty_member.faculty_type == "teaching":
+                present_days = faculty_member.attendance.count("Present")
+                absent_days = faculty_member.attendance.count("Absent")
+                attendance_percentage = faculty_member.calculate_attendance_percentage(self.working_days)
+                bonus = faculty_member.bonus
+                print(f"{faculty_member.name:<20} {faculty_member.id:<10} {present_days:<15} {absent_days:<15} {attendance_percentage:<20.2f} {bonus if bonus > 0 else 'None':<20}")
+
+        # For non-teaching faculty
+        print("\nNon-Teaching Faculty:")
+        print(f"{'Name':<20} {'ID':<10} {'Present Days':<15} {'Absent Days':<15} {'Attendance Percentage':<20} {'Bonus':<20}")
+        for faculty_member in self.faculty.values():
+            if faculty_member.faculty_type == "non-teaching":
+                present_days = faculty_member.attendance.count("Present")
+                absent_days = faculty_member.attendance.count("Absent")
+                attendance_percentage = faculty_member.calculate_attendance_percentage(self.working_days)
+                bonus = faculty_member.bonus
+                print(f"{faculty_member.name:<20} {faculty_member.id:<10} {present_days:<15} {absent_days:<15} {attendance_percentage:<20.2f} {bonus if bonus > 0 else 'None':<20}")
+
+
+def main():
+    system = AttendanceSystem()
+    while True:
+        print("\nClassroom Attendance Management System")
+        print("1. Add Student")
+        print("2. Add Faculty")
+        print("3. Mark Attendance")
+        print("4. Calculate Attendance Percentage")
+        print("5. View Student Details")
+        print("6. View Faculty Details")
+        print("7. Reset Attendance Records")
+        print("8. View Attendance Summary")
+        print("9. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            roll_number = input("Enter student roll number: ")
+            name = input("Enter student name: ")
+            system.add_student(roll_number, name)
+        elif choice == '2':
+            faculty_id = input("Enter faculty ID: ")
+            name = input("Enter faculty name: ")
+            faculty_type = input("Enter faculty type (teaching/non-teaching): ").strip().lower()
+            system.add_faculty(faculty_id, name, faculty_type)
+        elif choice == '3':
+            system.mark_attendance()
+        elif choice == '4':
+            system.calculate_attendance_percentage()
+        elif choice == '5':
+            roll_number = input("Enter student roll number: ")
+            system.view_student_details(roll_number)
+        elif choice == '6':
+            faculty_id = input("Enter faculty ID: ")
+            system.view_faculty_details(faculty_id)
+        elif choice == '7':
+            system.reset_attendance_records()
+        elif choice == '8':
+            system.view_attendance_summary()
+        elif choice == '9':
+            print("Exiting the system. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
